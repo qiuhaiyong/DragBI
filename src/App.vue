@@ -11,18 +11,17 @@
       @dragover="(event) => event.preventDefault()"
       @drop="onDrop"
     >
-      <div
+      <!-- <VueDrageResize :isActive="true" :w="200" :h="200">
+        <div class="test-box"></div>
+      </VueDrageResize> -->
+      <VueDragMy
         class="box"
         v-for="box in boxList"
         :key="box.id"
         :style="`transform: translate(${box.x}px, ${box.y}px);`"
-      >
-        new
-      </div>
-      <!-- <VueDrageResize :isActive="true" :w="200" :h="200">
-        <div class="test-box"></div>
-      </VueDrageResize> -->
-      <VueDragMy></VueDragMy>
+        @click.native="clickHandler"
+      ></VueDragMy>
+      <!-- <ToolBar v-if="showToolBar"></ToolBar> -->
       <ToolBar></ToolBar>
     </div>
   </div>
@@ -35,6 +34,8 @@ import VueDragMy from "@/components/vue-drag-my";
 import ToolBar from "@/components/ToolBar";
 // tool配置
 import { widgetList } from "@/constant/config";
+// vuex
+import { mapState } from "vuex";
 let positionX = 0;
 let positionY = 0;
 import { nanoid } from "nanoid";
@@ -52,6 +53,9 @@ export default {
       widgetList,
     };
   },
+  computed: {
+    ...mapState("toolbar", ["showToolBar"]),
+  },
   methods: {
     onDrop(e) {
       this.boxList.push({
@@ -59,14 +63,24 @@ export default {
         x: e.offsetX - positionX,
         y: e.offsetY - positionY,
       });
-      // console.log(e);
     },
     onMousedown(e, widget) {
       positionX = e.offsetX;
       positionY = e.offsetY;
-      // console.log("====================================");
-      // console.log(widget);
-      // console.log("====================================");
+    },
+    clickHandler() {
+      // 显示toolbar
+      if (!this.showToolBar) {
+        this.$store.dispatch("toolbar/showtoolbar", null);
+      }
+      // 同步widget信息到vuex
+      let toolBarInfo = {
+        w: 100,
+        h: 100,
+        left: 200,
+        top: 200,
+      };
+      this.$store.dispatch("toolbar/updatetoolbarinfo", toolBarInfo);
     },
   },
   mounted() {},
@@ -109,7 +123,6 @@ export default {
   position: absolute;
   width: 100px;
   height: 100px;
-  border: 1px solid grey;
 }
 
 .test-box {

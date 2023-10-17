@@ -1,18 +1,23 @@
 export default {
-    module: true,
+    namespaced: true,
     state: () => ({
-        count: 0
+        showToolBar: false,
+        toolBarInfo: {}
     }),
     mutations: {
-        increment(state) {
-            // 这里的 `state` 对象是模块的局部状态
-            state.count++
+        SHOWTOOLBAR(state) {
+            state.showToolBar = true
+        },
+        UPDATETOOLBARINFO(state, toolBarInfo) {
+            state.toolBarInfo = toolBarInfo
         }
     },
-
-    getters: {
-        doubleCount(state) {
-            return state.count * 2
+    actions: {
+        showtoolbar({ commit }) {
+            commit('SHOWTOOLBAR', null)
+        },
+        updatetoolbarinfo({ commit }, toolBarInfo) {
+            commit('UPDATETOOLBARINFO', toolBarInfo)
         }
     }
 }

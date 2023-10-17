@@ -1,4 +1,4 @@
-# drag-demo
+# drag-bi
 
 ## Project setup
 ```
