@@ -18,6 +18,12 @@ export default {
     widgetList: {
       type: Array,
     },
+    w: {
+      type: Number,
+    },
+    h: {
+      type: Number,
+    },
   },
 };
 </script>

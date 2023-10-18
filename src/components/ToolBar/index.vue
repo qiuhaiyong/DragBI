@@ -1,24 +1,56 @@
 <template>
   <div class="tool-bar-container">
     <div class="tool-bar-row">
+      <div class="tool-bar-col btn">setting</div>
+      <div class="tool-bar-col btn">data</div>
+    </div>
+    <div class="tool-bar-row">
       <div class="tool-bar-col">
-        <label for="width">width:</label><input id="width" type="text" />
+        <label for="width">width:</label
+        ><input
+          id="width"
+          type="text"
+          :value="toolBarInfo.w"
+          ref="w"
+          @blur="save"
+        />
       </div>
       <div class="tool-bar-col">
-        <label for="heigth">heigth:</label><input id="heigth" type="text" />
+        <label for="heigth">heigth:</label
+        ><input
+          id="heigth"
+          type="text"
+          :value="toolBarInfo.h"
+          ref="h"
+          @blur="save"
+        />
       </div>
     </div>
     <div class="tool-bar-row">
       <div class="tool-bar-col">
-        <label for="left">left:</label><input id="left" type="text" />
+        <label for="left">left:</label
+        ><input
+          id="left"
+          type="text"
+          :value="toolBarInfo.x"
+          ref="x"
+          @blur="save"
+        />
       </div>
       <div class="tool-bar-col">
-        <label for="top">top:</label><input id="top" type="text" />
+        <label for="top">top:</label
+        ><input
+          id="top"
+          type="text"
+          :value="toolBarInfo.y"
+          ref="y"
+          @blur="save"
+        />
       </div>
     </div>
     <div class="tool-bar-row">
       <div class="tool-bar-col">
-        <button>save</button>
+        <button @click="save">save</button>
       </div>
     </div>
   </div>
@@ -28,13 +60,23 @@
 import { mapState } from "vuex";
 export default {
   data() {
-    console.log("====================================");
-    console.log(this);
-    console.log("====================================");
     return {};
   },
   computed: {
     ...mapState("toolbar", ["toolBarInfo"]),
+  },
+  methods: {
+    save() {
+      let charts = this.toolBarInfo;
+      charts.w = this.$refs.w.value;
+      charts.h = this.$refs.h.value;
+      charts.x = this.$refs.x.value;
+      charts.y = this.$refs.y.value;
+      this.$store.dispatch("charts/updateCharts", charts);
+      console.log("====================================");
+      console.log("setp1", charts);
+      console.log("====================================");
+    },
   },
 };
 </script>
@@ -64,5 +106,10 @@ export default {
 
 .tool-bar-row input:focus {
   border: 0;
+}
+.btn {
+  flex: 1;
+  width: 100px;
+  height: 40px;
 }
 </style>

@@ -6,9 +6,9 @@
     :style="dragStyle"
     @mousedown.prevent.stop="mousedownHandler"
     @mouseup.prevent.stop="mouseupHandler"
-    @blur="blurHandler"
-    @focus="focusHandler"
-  ></div>
+  >
+    <slot></slot>
+  </div>
 </template>
 
 <script>
@@ -21,10 +21,14 @@ export default {
       showBorder: false,
     };
   },
-  props: {},
+  props: ["charts"],
   computed: {
     dragStyle() {
-      let styleObj = {};
+      let styleObj = {
+        left: this.charts.x + "px",
+        top: this.charts.y + "px",
+        zIndex: this.charts.zindex,
+      };
       if (this.dragging) {
         styleObj.border = "1px solid green";
       }
@@ -48,6 +52,16 @@ export default {
             const movey = event.clientY - y + originTop;
             drag.style.left = movex + "px";
             drag.style.top = movey + "px";
+            const charts = {
+              id: this.charts.id,
+              x: movex,
+              y: movey,
+              w: drag.offsetWidth - 1,
+              h: drag.offsetHeight - 1,
+              option: this.charts.option,
+              zindex: this.charts.zindex,
+            };
+            this.$emit("dragging", charts);
           }
         },
         { passive: true }
@@ -56,17 +70,8 @@ export default {
     mouseupHandler() {
       this.dragging = false;
     },
-    blurHandler(event) {
-      console.log("====================================");
-      console.log("blur........");
-      console.log("====================================");
-    },
-    focusHandler(event) {
-      console.log("====================================");
-      console.log("focus.......");
-      console.log("====================================");
-    },
   },
+  mounted() {},
 };
 </script>
 
@@ -75,6 +80,5 @@ export default {
   position: absolute;
   width: 200px;
   height: 200px;
-  background-color: pink;
 }
 </style>
