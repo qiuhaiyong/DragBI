@@ -1,10 +1,8 @@
 <template>
   <div id="app">
     <!-- 工具栏栏 -->
-    <WidgetList
-      :widgetList="widgetList"
-      @onMousedown="onMousedown"
-    ></WidgetList>
+    <WidgetList :widgetList="widgetList" @onMousedown="onMousedown">
+    </WidgetList>
     <!--  画板-->
     <div
       class="panel"
@@ -25,8 +23,8 @@
       >
         <DataCharts :option="charts.option"></DataCharts>
       </VueDragMy>
-      <!-- <ToolBar v-if="showToolBar"></ToolBar> -->
-      <ToolBar></ToolBar>
+      <ToolBar v-if="showToolBar"></ToolBar>
+      <!-- <ToolBar></ToolBar> -->
     </div>
   </div>
 </template>
@@ -85,9 +83,9 @@ export default {
       // 显示toolbar
       if (!this.showToolBar) {
         this.$store.dispatch("toolbar/showtoolbar", null);
+        // 同步charts信息到vuex;
+        this.$store.dispatch("toolbar/updatetoolbarinfo", charts);
       }
-      // 同步charts信息到vuex;
-      this.$store.dispatch("toolbar/updatetoolbarinfo", charts);
     },
     onDragging(charts) {
       // 改变toolbar中的数据
